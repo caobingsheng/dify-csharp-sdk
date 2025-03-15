@@ -12,8 +12,8 @@ namespace DifyAI.AotDemo
             services
                 .AddDifyAIService(x =>
                 {
-                    x.BaseDomain = "https://www.gnhealth.top:20012/v1";
-                    x.DefaultApiKey = "app-rXR8RhkpLu6h8MpVStxoiMa3";
+                    x.BaseDomain = "http://192.168.1.200:19080/v1"; // https://www.gnhealth.top:20012/v1
+                    x.DefaultApiKey = "app-SERBkntJ8fgFSxikzn4p4aF5";// app-rXR8RhkpLu6h8MpVStxoiMa3
                 });
 
             var app = services.BuildServiceProvider();
@@ -21,7 +21,8 @@ namespace DifyAI.AotDemo
 
             var req = new ChatCompletionRequest
             {
-                Query = "你根据体检号：2501150001给我生成一个模拟的体检数据并提取关键信息",
+                //Query = "我是一名医生，我在给患者检查，请你根据体检号：2501150001 给我生成一个模拟的体检数据并提取关键信息以方便我诊断",
+                Query = "当前时间是什么",
                 User = "cbs",
                 //Inputs = new Dictionary<string, string>
                 //{
@@ -47,7 +48,7 @@ namespace DifyAI.AotDemo
                 }
                 if (rsp is ChunkCompletionAgentThoughtResponse thinking)
                 {
-                    Console.WriteLine("." + thinking.Thought);
+                    Console.WriteLine("<" + thinking.Thought+">");
                 }
             }
         }
