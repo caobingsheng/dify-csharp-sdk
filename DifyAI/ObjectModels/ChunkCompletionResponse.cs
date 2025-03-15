@@ -3,12 +3,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using JsonDerivedTypeAttribute = System.Text.Json.Serialization.JsonDerivedTypeAttribute;
+using JsonPolymorphicAttribute = System.Text.Json.Serialization.JsonPolymorphicAttribute;
 
 namespace DifyAI.ObjectModels
 {
-    [JsonPolymorphic(TypeDiscriminatorPropertyName = "event", DefaultType = typeof(ChunkCompletionUnknownResponse))]
+    [JsonSourceGenerationOptions(
+        PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase//,
+                                                              //IgnoreReadOnlyProperties = false,
+                                                              //IncludeFields = true,
+                                                              //WriteIndented = false,
+                                                              //DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    )]
+    [JsonSerializable(typeof(ChatCompletionRequest))]
+    [JsonSerializable(typeof(ChunkCompletionResponse))]
+    [JsonSerializable(typeof(ChunkCompletionMessageResponse))]
+    [JsonSerializable(typeof(ChunkCompletionMessageReplaceResponse))]
+    [JsonSerializable(typeof(ChunkCompletionMessageFileResponse))]
+    [JsonSerializable(typeof(ChunkCompletionMessageEndResponse))]
+    [JsonSerializable(typeof(ChunkCompletionWorkflowStartedResponse))]
+    [JsonSerializable(typeof(ChunkCompletionWorkflowFinishedResponse))]
+    [JsonSerializable(typeof(ChunkCompletionNodeStartedResponse))]
+    [JsonSerializable(typeof(ChunkCompletionNodeFinishedResponse))]
+    [JsonSerializable(typeof(ChunkCompletionAgentMessageResponse))]
+    [JsonSerializable(typeof(ChunkCompletionAgentThoughtResponse))]
+    [JsonSerializable(typeof(ChunkCompletionErrorResponse))]
+    [JsonSerializable(typeof(ChunkCompletionUnknownResponse))]
+    public partial class DifyAIJsonContext : JsonSerializerContext
+    {
+    }
+
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "event")]
     [JsonDerivedType(typeof(ChunkCompletionMessageResponse), Event_Message)]
     [JsonDerivedType(typeof(ChunkCompletionMessageReplaceResponse), Event_MessageReplace)]
     [JsonDerivedType(typeof(ChunkCompletionMessageFileResponse), Event_MessageFile)]
@@ -20,6 +49,7 @@ namespace DifyAI.ObjectModels
     [JsonDerivedType(typeof(ChunkCompletionAgentMessageResponse), Event_AgentMessage)]
     [JsonDerivedType(typeof(ChunkCompletionAgentThoughtResponse), Event_AgentThought)]
     [JsonDerivedType(typeof(ChunkCompletionErrorResponse), Event_Error)]
+    [JsonDerivedType(typeof(ChunkCompletionUnknownResponse), null)]
     public abstract class ChunkCompletionResponse
     {
         /// <summary>
