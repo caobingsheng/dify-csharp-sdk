@@ -1,5 +1,5 @@
-﻿using DifyAI.ObjectModels;
-using Microsoft.Extensions.Options;
+﻿using DifyAI.Json;
+using DifyAI.ObjectModels;
 using MimeMapping;
 using System;
 using System.Collections.Generic;
@@ -286,16 +286,17 @@ namespace DifyAI
             multipartContent.Add(new StringContent(json), "data");
         }
 
-        private class Error
-        {
-            [JsonPropertyName("code")]
-            public string Code { get; set; }
 
-            [JsonPropertyName("message")]
-            public string Message { get; set; }
+    }
+    public class Error
+    {
+        [JsonPropertyName("code")]
+        public string Code { get; set; }
 
-            [JsonPropertyName("status")]
-            public int Status { get; set; }
-        }
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        [JsonPropertyName("status")]
+        public int Status { get; set; }
     }
 }
