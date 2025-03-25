@@ -13,7 +13,7 @@ namespace DifyAI.Services
             request.Streaming = false;
 
             using var responseMessage = await _httpClient.DownloadAsync("text-to-audio", request, cancellationToken);
-            var bytes = await responseMessage.Content.ReadAsByteArrayAsync(cancellationToken);
+            var bytes = await responseMessage.Content.ReadAsByteArrayAsync();
             
             return new TextToAudioResponse
             {

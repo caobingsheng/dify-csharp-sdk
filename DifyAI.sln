@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DifyAI", "DifyAI\DifyAI.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DifyAI.Test", "DifyAI.Test\DifyAI.Test.csproj", "{C5718447-4EAF-491B-95EC-42374E444AB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DifyAI.AotDemo", "DifyAI.AotDemo\DifyAI.AotDemo.csproj", "{D7C1D887-919F-4087-8872-C762CEF7766E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C5718447-4EAF-491B-95EC-42374E444AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5718447-4EAF-491B-95EC-42374E444AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5718447-4EAF-491B-95EC-42374E444AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C1D887-919F-4087-8872-C762CEF7766E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C1D887-919F-4087-8872-C762CEF7766E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C1D887-919F-4087-8872-C762CEF7766E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C1D887-919F-4087-8872-C762CEF7766E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

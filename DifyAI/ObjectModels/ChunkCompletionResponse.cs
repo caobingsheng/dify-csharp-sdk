@@ -3,12 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using JsonDerivedTypeAttribute = System.Text.Json.Serialization.JsonDerivedTypeAttribute;
+using JsonPolymorphicAttribute = System.Text.Json.Serialization.JsonPolymorphicAttribute;
 
 namespace DifyAI.ObjectModels
 {
-    [JsonPolymorphic(TypeDiscriminatorPropertyName = "event", DefaultType = typeof(ChunkCompletionUnknownResponse))]
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "event")]
     [JsonDerivedType(typeof(ChunkCompletionMessageResponse), Event_Message)]
     [JsonDerivedType(typeof(ChunkCompletionMessageReplaceResponse), Event_MessageReplace)]
     [JsonDerivedType(typeof(ChunkCompletionMessageFileResponse), Event_MessageFile)]
@@ -20,6 +24,7 @@ namespace DifyAI.ObjectModels
     [JsonDerivedType(typeof(ChunkCompletionAgentMessageResponse), Event_AgentMessage)]
     [JsonDerivedType(typeof(ChunkCompletionAgentThoughtResponse), Event_AgentThought)]
     [JsonDerivedType(typeof(ChunkCompletionErrorResponse), Event_Error)]
+    [JsonDerivedType(typeof(ChunkCompletionUnknownResponse), null)]
     public abstract class ChunkCompletionResponse
     {
         /// <summary>

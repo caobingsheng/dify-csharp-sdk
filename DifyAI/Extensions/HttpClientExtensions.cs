@@ -1,5 +1,5 @@
-﻿using DifyAI.ObjectModels;
-using Microsoft.Extensions.Options;
+﻿using DifyAI.Json;
+using DifyAI.ObjectModels;
 using MimeMapping;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
@@ -27,6 +26,7 @@ namespace DifyAI
             WriteIndented = false,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             NumberHandling = JsonNumberHandling.AllowReadingFromString, // 有些数字型的dify返回为字符串
+            TypeInfoResolver = DifyAIJsonContext.Default
         };
 
         public static void AddAuthorization(this HttpClient httpClient, string apiKey)
@@ -104,7 +104,6 @@ namespace DifyAI
         public static async IAsyncEnumerable<T> PostChunkAsAsync<T>(this HttpClient httpClient, string requestUri, IRequest requestModel, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             httpClient.AddAuthorization(requestModel.ApiKey);
-
             using var content = JsonContent.Create(requestModel, requestModel.GetType(), null, _defaultSerializerOptions);
             using var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
@@ -113,7 +112,7 @@ namespace DifyAI
 
             await responseMessage.ValidateResponseAsync(cancellationToken);
 
-            await using var stream = await responseMessage.Content.ReadAsStreamAsync(cancellationToken);
+            using var stream = await responseMessage.Content.ReadAsStreamAsync();
 
             using var reader = new StreamReader(stream);
 
@@ -250,9 +249,9 @@ namespace DifyAI
         private static string AddQueryString(string url, object obj)
         {
             var queryString = new StringBuilder();
-            foreach (var (key, value) in GetObjectFields(obj))
+            foreach (var keyValue in GetObjectFields(obj))
             {
-                queryString.Append($"&{key}={Uri.EscapeDataString(value)}");
+                queryString.Append($"&{keyValue.Key}={Uri.EscapeDataString(keyValue.Value)}");
             }
 
             if (queryString.Length > 0)
@@ -273,11 +272,11 @@ namespace DifyAI
         private static void AddObjectFields(this MultipartFormDataContent multipartContent, object obj)
         {
             // 迭代 对象的字段并添加到 MultipartFormDataContent
-            foreach (var (key, value) in GetObjectFields(obj))
+            foreach (var keyValue in GetObjectFields(obj))
             {
                 // 创建 StringContent 并添加到 MultipartFormDataContent
-                var content = new StringContent(value);
-                multipartContent.Add(content, key);
+                var content = new StringContent(keyValue.Value);
+                multipartContent.Add(content, keyValue.Key);
             }
         }
 
@@ -287,16 +286,17 @@ namespace DifyAI
             multipartContent.Add(new StringContent(json), "data");
         }
 
-        private class Error
-        {
-            [JsonPropertyName("code")]
-            public string Code { get; set; }
 
-            [JsonPropertyName("message")]
-            public string Message { get; set; }
+    }
+    public class Error
+    {
+        [JsonPropertyName("code")]
+        public string Code { get; set; }
 
-            [JsonPropertyName("status")]
-            public int Status { get; set; }
-        }
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        [JsonPropertyName("status")]
+        public int Status { get; set; }
     }
 }
