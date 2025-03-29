@@ -9,7 +9,22 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DifyAIServicesExtensions
     {
-        public static readonly string DIFY = "DIFY-";
+        public static readonly string PREFIX = "DIFY-";
+
+        /// <summary>
+        /// 获取DifyAI服务名称
+        /// </summary>
+        /// <param name="configName">配置名</param>
+        /// <returns></returns>
+        public static string GetAIServiceName(string configName)
+        {
+            if (configName.StartsWith(PREFIX))
+            {
+                return configName;
+            }
+            return PREFIX + configName;
+        }
+
         public static IHttpClientBuilder AddDifyAIService(this IServiceCollection services)
         {
             return services.AddDifyAIService(_ => { });
@@ -18,7 +33,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IHttpClientBuilder AddDifyAIService(this IServiceCollection services, Action<DifyAIOptions> configure, string key = "DefaultDify")
         {
             services.Configure(configure);
-            return services.AddHttpClient<IDifyAIService, DifyAIService>(DIFY + key)
+            return services.AddHttpClient<IDifyAIService, DifyAIService>(PREFIX + key)
                 .ConfigureHttpClient((provider, httpClient) =>
                 {
                     var options = provider.GetService<IOptions<DifyAIOptions>>().Value;
