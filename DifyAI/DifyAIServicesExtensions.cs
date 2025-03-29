@@ -9,16 +9,16 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class DifyAIServicesExtensions
     {
+        public static readonly string DIFY = "DIFY-";
         public static IHttpClientBuilder AddDifyAIService(this IServiceCollection services)
         {
             return services.AddDifyAIService(_ => { });
         }
 
-        public static IHttpClientBuilder AddDifyAIService(this IServiceCollection services, Action<DifyAIOptions> configure)
+        public static IHttpClientBuilder AddDifyAIService(this IServiceCollection services, Action<DifyAIOptions> configure, string key = "DefaultDify")
         {
             services.Configure(configure);
-
-            return services.AddHttpClient<IDifyAIService, DifyAIService>()
+            return services.AddHttpClient<IDifyAIService, DifyAIService>(DIFY + key)
                 .ConfigureHttpClient((provider, httpClient) =>
                 {
                     var options = provider.GetService<IOptions<DifyAIOptions>>().Value;
