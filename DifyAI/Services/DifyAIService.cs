@@ -11,7 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace DifyAI.Services
 {
-    internal partial class DifyAIService : IDifyAIService
+    public partial class DifyAIService : IDifyAIService
     {
         private readonly HttpClient _httpClient;
         private readonly string _datasetApiKey;
